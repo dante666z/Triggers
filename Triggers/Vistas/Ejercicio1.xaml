@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Triggers.Vistas.Ejercicio1"
+             xmlns:disparador="clr-namespace:Triggers.Triggers.TEjercicio1"
+             xmlns:sombra="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows">
+    <Grid RowDefinitions="auto, *" BackgroundColor="White">
+        <StackLayout HeightRequest="180"
+                     Margin="10">
+            <Label Text="Posibles regalos"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   TextColor="#FF506B"/>
+            <Label Text="dataTrigger"
+                   FontAttributes="Bold"
+                   FontSize="15"
+                   TextColor="#8D8D8D"/>
+            <CollectionView ItemsSource="{Binding ListaCategorias}"
+                            x:Name="listaCategorias">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="5"
+                                       Orientation="Horizontal"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <sombra:Shadows CornerRadius="0"
+                                            Shades="{sombra:SingleShade BlurRadius=0, Offset='0,0', Opacity=0, Color=Transparent}">
+                                <Frame Margin="0, 5, 5, 5"
+                                       Padding="8"
+                                       BackgroundColor="{Binding BackGroundColor}"
+                                       CornerRadius="34"
+                                       HeightRequest="50"
+                                       WidthRequest="135"
+                                       HasShadow="false"
+                                       VerticalOptions="Center">
+                                    <Grid ColumnDefinitions="auto, *"
+                                          RowSpacing="0"
+                                          VerticalOptions="Center">
+                                        <BoxView BackgroundColor="White"
+                                                 CornerRadius="25"
+                                                 HeightRequest="50"
+                                                 WidthRequest="50"/>
+                                        <Image Source="{Binding imagen}"
+                                               HeightRequest="34"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="CenterAndExpand"
+                                               WidthRequest="34"/>
+                                        <StackLayout Grid.Column="1">
+                                            <Label Text="{Binding descripcion}"
+                                                   FontSize="16"
+                                                   VerticalOptions="Start"
+                                                   TextColor="{Binding TextColor}"/>
+                                            <Label Text="{Binding numeroItem}"
+                                                   FontSize="9"
+                                                   TextColor="{Binding TextColor}"
+                                                   VerticalOptions="Start"/>
+                                        </StackLayout>
+                                    </Grid>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.SeleccionarCommand,
+                                            Source={x:Reference listaCategorias}}" CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                                <sombra:Shadows.Triggers>
+                                    <DataTrigger Binding="{Binding Selected}"
+                                                 TargetType="sombra:Shadows"
+                                                 Value="true">
+                                        <Setter Property="Shades"
+                                                Value="{sombra:SingleShade BlurRadius=5, Offset='0,5', Opacity=0.7, Color=#FF506B}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Selected}"
+                                                 TargetType="sombra:Shadows"
+                                                 Value="true">
+                                        <Setter Property="CornerRadius"
+                                                Value="34"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Selected}"
+                                                 TargetType="sombra:Shadows"
+                                                 Value="false">
+                                        <Setter Property="Shades"
+                                                Value="{sombra:SingleShade BlurRadius=0, Offset='0,0', Opacity=0.0, Color=Transparent}"/>
+                                    </DataTrigger>
+                                </sombra:Shadows.Triggers>
+                            </sombra:Shadows>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <Image Grid.Row="1"
+               VerticalOptions="CenterAndExpand"
+               Source="{Binding Imagen}">
+            <Image.Triggers>
+                <MultiTrigger TargetType="Image">
+                    <MultiTrigger.Conditions>
+                        <BindingCondition Binding="{Binding ActivadorAnimImagen}"
+                                          Value="true"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <disparador:TImagen activacion="True"/>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <disparador:TImagen activacion="false"/>
+                    </MultiTrigger.ExitActions>
+                </MultiTrigger>
+            </Image.Triggers>
+        </Image>
+    </Grid>
+</ContentPage>
